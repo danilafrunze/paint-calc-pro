@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -15,10 +15,10 @@
 
   <style>
     /* ==========================================================================
-       APPLE iOS DESIGN SYSTEM (HIG) - iOS 18/26 Theme
+       APPLE iOS DESIGN SYSTEM (HIG) - iOS 18/26 Theme + Floating Dock
        ========================================================================== */
     :root {
-      /* Dark Mode (Default) - Apple iOS Dark Palette */
+      /* Dark Theme (Default) */
       --ios-bg: #000000;
       --ios-bg-grouped: #000000;
       --ios-card: #1c1c1e;
@@ -45,46 +45,15 @@
       --ios-indigo: #5e5ce6;
       --ios-gray: #8e8e93;
 
-      /* Nav & Tab Bar */
-      --ios-bar-bg: rgba(28, 28, 30, 0.75);
-      --ios-bar-border: rgba(255, 255, 255, 0.12);
+      /* Floating Dock styling */
+      --dock-bg: rgba(36, 36, 40, 0.75);
+      --dock-border: rgba(255, 255, 255, 0.2);
+      --dock-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.3);
 
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-top: env(safe-area-inset-top, 20px);
+      --safe-bottom: env(safe-area-inset-bottom, 20px);
       --safe-left: env(safe-area-inset-left, 0px);
       --safe-right: env(safe-area-inset-right, 0px);
-    }
-
-    @media (prefers-color-scheme: light) {
-      :root:not([data-theme="dark"]) {
-        --ios-bg: #f2f2f7;
-        --ios-bg-grouped: #f2f2f7;
-        --ios-card: #ffffff;
-        --ios-card-secondary: #f2f2f7;
-        --ios-card-tertiary: #e5e5ea;
-        --ios-fill-tertiary: rgba(118, 118, 128, 0.12);
-        --ios-fill-quaternary: rgba(118, 118, 128, 0.08);
-
-        --ios-label: #000000;
-        --ios-secondary-label: #8a8a8e;
-        --ios-tertiary-label: #c7c7cc;
-        --ios-quaternary-label: #d1d1d6;
-
-        --ios-separator: rgba(60, 60, 67, 0.18);
-        --ios-separator-opaque: #e5e5ea;
-
-        --ios-blue: #007aff;
-        --ios-orange: #ff9500;
-        --ios-green: #34c759;
-        --ios-purple: #af52de;
-        --ios-red: #ff3b30;
-        --ios-teal: #5ac8fa;
-        --ios-indigo: #5856d6;
-        --ios-gray: #8e8e93;
-
-        --ios-bar-bg: rgba(249, 249, 249, 0.82);
-        --ios-bar-border: rgba(0, 0, 0, 0.15);
-      }
     }
 
     :root[data-theme="light"] {
@@ -113,11 +82,11 @@
       --ios-indigo: #5856d6;
       --ios-gray: #8e8e93;
 
-      --ios-bar-bg: rgba(249, 249, 249, 0.82);
-      --ios-bar-border: rgba(0, 0, 0, 0.15);
+      --dock-bg: rgba(240, 240, 245, 0.82);
+      --dock-border: rgba(0, 0, 0, 0.12);
+      --dock-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
-    /* Base Reset */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -132,14 +101,19 @@
       -webkit-user-select: text;
     }
 
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background-color: var(--ios-bg-grouped);
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background-color: var(--ios-bg-grouped);
       color: var(--ios-label);
       min-height: 100vh;
       min-height: -webkit-fill-available;
-      padding-top: calc(var(--safe-top) + 8px);
-      padding-bottom: calc(var(--safe-bottom) + 90px);
+      padding-top: calc(var(--safe-top) + 10px);
+      padding-bottom: calc(var(--safe-bottom) + 115px); /* Space for floating dock */
       padding-left: max(16px, var(--safe-left));
       padding-right: max(16px, var(--safe-right));
       overflow-x: hidden;
@@ -147,19 +121,21 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
+    /* Full responsive layout container (optimally sized for iPhone 14/15/16 Pro Max & mini) */
     .app-viewport {
-      max-width: 540px;
+      width: 100%;
+      max-width: 480px;
       margin: 0 auto;
     }
 
     /* ==========================================================================
-       APPLE NAVIGATION BAR & LARGE TITLE
+       APPLE NAVIGATION BAR
        ========================================================================== */
     .ios-navbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 0 6px 0;
+      padding: 6px 0 10px 0;
       margin-bottom: 8px;
     }
 
@@ -170,15 +146,15 @@
 
     .ios-sub-caption {
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      font-weight: 700;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--ios-secondary-label);
       margin-bottom: 2px;
     }
 
     .ios-large-title {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 800;
       letter-spacing: -0.03em;
       line-height: 1.1;
@@ -192,8 +168,8 @@
     }
 
     .ios-round-btn {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       background: var(--ios-card);
       border: 0.5px solid var(--ios-separator);
@@ -217,17 +193,17 @@
     }
 
     .ios-round-btn svg {
-      width: 18px;
-      height: 18px;
+      width: 19px;
+      height: 19px;
       fill: currentColor;
     }
 
     /* ==========================================================================
-       APPLE SEGMENTED CONTROL (Material Switcher)
+       APPLE SEGMENTED CONTROL (Top Materials)
        ========================================================================== */
     .ios-segmented-control-container {
       background: var(--ios-card);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 3px;
       display: flex;
       margin-bottom: 18px;
@@ -241,14 +217,13 @@
 
     .ios-segment-item {
       flex: 1;
-      min-width: 82px;
+      min-width: 86px;
       text-align: center;
-      padding: 8px 10px;
+      padding: 8px 8px;
       font-size: 13px;
       font-weight: 600;
-      letter-spacing: -0.01em;
       color: var(--ios-secondary-label);
-      border-radius: 9px;
+      border-radius: 11px;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
       white-space: nowrap;
@@ -260,42 +235,116 @@
     }
 
     .ios-segment-item span.segment-code {
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 750;
+      letter-spacing: -0.01em;
     }
 
     .ios-segment-item span.segment-sub {
       font-size: 9px;
-      font-weight: 500;
-      opacity: 0.8;
+      font-weight: 600;
+      opacity: 0.85;
       text-transform: uppercase;
     }
 
     .ios-segment-item.active {
       background: var(--ios-card-secondary);
       color: var(--ios-label);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.22);
     }
 
-    :root:not([data-theme="dark"]) .ios-segment-item.active {
+    :root[data-theme="light"] .ios-segment-item.active {
       background: #ffffff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* ==========================================================================
+       HERO TOTAL WEIGHT CARD
+       ========================================================================== */
+    .ios-hero-weight-card {
+      background: var(--ios-card);
+      border-radius: 18px;
+      padding: 18px 20px;
+      border: 0.5px solid var(--ios-separator);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .ios-weight-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .ios-weight-input-box {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 6px 0;
+    }
+
+    .ios-big-input {
+      background: transparent;
+      border: none;
+      font-size: 52px;
+      font-weight: 900;
+      color: var(--ios-label);
+      letter-spacing: -0.04em;
+      outline: none;
+      width: 220px;
+      font-family: inherit;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .ios-big-unit {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ios-secondary-label);
+      margin-left: 2px;
+    }
+
+    .ios-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .ios-pill-btn {
+      background: var(--ios-fill-tertiary);
+      border: none;
+      border-radius: 10px;
+      padding: 9px 4px;
+      color: var(--ios-label);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .ios-pill-btn:active {
+      transform: scale(0.94);
+      background: var(--ios-blue);
+      color: #ffffff;
     }
 
     /* ==========================================================================
        APPLE INSET GROUPED LIST & SECTIONS
        ========================================================================== */
     .ios-section {
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .ios-section-header {
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: -0.05px;
       color: var(--ios-secondary-label);
-      padding: 0 16px 6px 16px;
+      padding: 0 16px 7px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -304,25 +353,24 @@
     .ios-section-footer {
       font-size: 12px;
       color: var(--ios-secondary-label);
-      padding: 6px 16px 0 16px;
-      line-height: 1.35;
+      padding: 7px 16px 0 16px;
+      line-height: 1.4;
     }
 
     .ios-grouped-card {
       background: var(--ios-card);
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
       border: 0.5px solid var(--ios-separator);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     }
 
-    /* Inset Table Cell */
     .ios-cell {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
-      min-height: 52px;
+      padding: 13px 16px;
+      min-height: 54px;
       position: relative;
       background: var(--ios-card);
       transition: background 0.15s;
@@ -332,7 +380,7 @@
       content: "";
       position: absolute;
       bottom: 0;
-      left: 56px;
+      left: 60px;
       right: 0;
       height: 0.5px;
       background: var(--ios-separator);
@@ -346,21 +394,20 @@
       overflow: hidden;
     }
 
-    /* Apple-style App/Icon Badge in Table Cell */
     .ios-icon-badge {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
 
     .ios-icon-badge svg {
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
       fill: #ffffff;
     }
 
@@ -378,8 +425,8 @@
     }
 
     .ios-cell-title {
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 15.5px;
+      font-weight: 650;
       color: var(--ios-label);
       letter-spacing: -0.01em;
       white-space: nowrap;
@@ -390,7 +437,6 @@
     .ios-cell-subtitle {
       font-size: 12px;
       color: var(--ios-secondary-label);
-      letter-spacing: -0.01em;
     }
 
     .ios-cell-right {
@@ -420,86 +466,9 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* ==========================================================================
-       HERO TOTAL WEIGHT INPUT CARD
-       ========================================================================== */
-    .ios-hero-weight-card {
-      background: var(--ios-card);
-      border-radius: 16px;
-      padding: 16px 18px;
-      border: 0.5px solid var(--ios-separator);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-
-    .ios-weight-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .ios-weight-input-box {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      padding: 8px 0;
-    }
-
-    .ios-big-input {
-      background: transparent;
-      border: none;
-      font-size: 52px;
-      font-weight: 900;
-      color: var(--ios-label);
-      letter-spacing: -0.04em;
-      outline: none;
-      width: 240px;
-      font-family: inherit;
-      font-variant-numeric: tabular-nums;
-      line-height: 1;
-    }
-
-    .ios-big-unit {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--ios-secondary-label);
-      margin-left: 4px;
-    }
-
-    /* Quick Pills */
-    .ios-pill-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .ios-pill-btn {
-      background: var(--ios-fill-tertiary);
-      border: none;
-      border-radius: 9px;
-      padding: 9px 4px;
-      color: var(--ios-label);
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
-      letter-spacing: -0.01em;
-    }
-
-    .ios-pill-btn:active {
-      transform: scale(0.94);
-      background: var(--ios-blue);
-      color: #ffffff;
-    }
-
-    /* ==========================================================================
-       RANGE ADJUSTER (MIN / MID / MAX)
-       ========================================================================== */
+    /* Range Tuner Sub-control */
     .ios-range-box {
-      padding: 12px 16px;
+      padding: 13px 16px;
       background: var(--ios-card);
       border-bottom: 0.5px solid var(--ios-separator);
     }
@@ -510,13 +479,13 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 13.5px;
+      font-weight: 650;
     }
 
     .ios-sub-segmented {
       background: var(--ios-fill-tertiary);
-      border-radius: 8px;
+      border-radius: 9px;
       padding: 2px;
       display: flex;
       gap: 2px;
@@ -524,10 +493,10 @@
 
     .ios-sub-seg-btn {
       flex: 1;
-      padding: 6px 8px;
+      padding: 7px 8px;
       background: transparent;
       border: none;
-      border-radius: 6px;
+      border-radius: 7px;
       color: var(--ios-secondary-label);
       font-size: 12px;
       font-weight: 600;
@@ -539,22 +508,20 @@
     .ios-sub-seg-btn.active {
       background: var(--ios-card-secondary);
       color: var(--ios-label);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-      font-weight: 700;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+      font-weight: 750;
     }
 
-    :root:not([data-theme="dark"]) .ios-sub-seg-btn.active {
+    :root[data-theme="light"] .ios-sub-seg-btn.active {
       background: #ffffff;
     }
 
-    /* ==========================================================================
-       APPLE ACTION BUTTONS & BOTTOM SHEET MODALS
-       ========================================================================== */
+    /* Action Buttons */
     .ios-action-bar {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-top: 16px;
+      margin-top: 18px;
     }
 
     .ios-btn {
@@ -562,8 +529,8 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      border-radius: 12px;
-      padding: 13px 16px;
+      border-radius: 14px;
+      padding: 14px 16px;
       font-size: 15px;
       font-weight: 700;
       letter-spacing: -0.01em;
@@ -587,17 +554,88 @@
       border: 0.5px solid var(--ios-separator);
     }
 
-    /* Modal Backdrop & Apple Half-Sheet */
+    /* ==========================================================================
+       APPLE FLOATING DOCK (iOS Home Screen Dock Style)
+       ========================================================================== */
+    .ios-dock-wrapper {
+      position: fixed;
+      bottom: calc(var(--safe-bottom) + 12px);
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 900;
+    }
+
+    .ios-dock {
+      pointer-events: auto;
+      background: var(--dock-bg);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 0.5px solid var(--dock-border);
+      box-shadow: var(--dock-shadow);
+      border-radius: 36px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: calc(100% - 36px);
+      max-width: 370px;
+      height: 66px;
+    }
+
+    .ios-dock-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: transparent;
+      border: none;
+      color: var(--ios-secondary-label);
+      font-size: 10px;
+      font-weight: 650;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      padding: 6px 4px;
+      border-radius: 20px;
+      transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .ios-dock-item svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+      transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .ios-dock-item.active {
+      color: var(--ios-blue);
+    }
+
+    .ios-dock-item:active {
+      transform: scale(0.92);
+    }
+
+    .ios-dock-item.active svg {
+      transform: scale(1.08);
+    }
+
+    /* ==========================================================================
+       APPLE HALF-SHEET MODALS (Inspector, Editor, Steps, Overpour)
+       ========================================================================== */
     .ios-sheet-overlay {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(0, 0, 0, 0.68);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      z-index: 999;
+      z-index: 1000;
       display: none;
       align-items: flex-end;
       justify-content: center;
@@ -609,14 +647,14 @@
 
     .ios-sheet {
       background: var(--ios-card);
-      border-radius: 20px 20px 0 0;
+      border-radius: 24px 24px 0 0;
       width: 100%;
-      max-width: 540px;
-      max-height: 86vh;
-      padding: 12px 20px calc(var(--safe-bottom) + 24px) 20px;
+      max-width: 480px;
+      max-height: 88vh;
+      padding: 12px 20px calc(var(--safe-bottom) + 30px) 20px;
       overflow-y: auto;
       animation: sheetSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 -4px 30px rgba(0,0,0,0.35);
+      box-shadow: 0 -6px 36px rgba(0,0,0,0.4);
     }
 
     @keyframes sheetSlideUp {
@@ -625,7 +663,7 @@
     }
 
     .ios-sheet-grabber {
-      width: 36px;
+      width: 38px;
       height: 5px;
       border-radius: 2.5px;
       background: var(--ios-tertiary-label);
@@ -640,7 +678,7 @@
     }
 
     .ios-sheet-title {
-      font-size: 19px;
+      font-size: 20px;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
@@ -660,52 +698,6 @@
       cursor: pointer;
     }
 
-    /* ==========================================================================
-       APPLE TAB BAR (iOS Bottom Navigation)
-       ========================================================================== */
-    .ios-tabbar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--ios-bar-bg);
-      backdrop-filter: blur(25px) saturate(180%);
-      -webkit-backdrop-filter: blur(25px) saturate(180%);
-      border-top: 0.5px solid var(--ios-bar-border);
-      display: flex;
-      justify-content: space-around;
-      padding-top: 8px;
-      padding-bottom: calc(var(--safe-bottom) + 8px);
-      z-index: 100;
-    }
-
-    .ios-tab-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      background: none;
-      border: none;
-      color: var(--ios-secondary-label);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      cursor: pointer;
-      padding: 2px 20px;
-      transition: color 0.15s;
-    }
-
-    .ios-tab-item.active {
-      color: var(--ios-blue);
-    }
-
-    .ios-tab-item svg {
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
-    }
-
-    /* Forms in Apple Sheet */
     .ios-form-row {
       margin-bottom: 14px;
     }
@@ -725,7 +717,7 @@
       width: 100%;
       background: var(--ios-card-secondary);
       border: 0.5px solid var(--ios-separator);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 12px 14px;
       color: var(--ios-label);
       font-size: 16px;
@@ -737,10 +729,10 @@
       border-color: var(--ios-blue);
     }
 
-    /* Step modal card */
+    /* Step Modal Box */
     .ios-step-box {
       background: var(--ios-card-secondary);
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 24px 16px;
       text-align: center;
       margin-bottom: 16px;
@@ -749,7 +741,7 @@
 
     .ios-step-counter {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 750;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--ios-blue);
@@ -770,7 +762,7 @@
     }
 
     .ios-step-number {
-      font-size: 50px;
+      font-size: 52px;
       font-weight: 900;
       color: var(--ios-blue);
       font-variant-numeric: tabular-nums;
@@ -796,14 +788,12 @@
     <header class="ios-navbar">
       <div class="ios-navbar-title-wrap">
         <span class="ios-sub-caption">Малярный цех • Весы</span>
-        <h1 class="ios-large-title">Калькулятор</h1>
+        <h1 class="ios-large-title" id="pageMainTitle">Калькулятор</h1>
       </div>
       <div class="ios-nav-actions">
-        <!-- Screen Wake Lock (Always On) -->
         <button id="wakeLockBtn" class="ios-round-btn" title="Не гасить экран" onclick="toggleWakeLock()">
           <svg viewBox="0 0 24 24"><path d="M12 2a1 1 0 0 1 1 1v1.07A8.002 8.002 0 0 1 20 12c0 2.2-.89 4.19-2.34 5.66l.76.76a1 1 0 0 1-1.42 1.42l-.76-.76A7.962 7.962 0 0 1 12 20a7.962 7.962 0 0 1-4.24-.92l-.76.76a1 1 0 0 1-1.42-1.42l.76-.76A7.962 7.962 0 0 1 4 12c0-4.08 3.05-7.44 7-7.93V3a1 1 0 0 1 1-1zm0 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
         </button>
-        <!-- Theme Toggle -->
         <button id="themeToggleBtn" class="ios-round-btn" title="Сменить тему" onclick="toggleTheme()">
           <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
         </button>
@@ -811,17 +801,15 @@
     </header>
 
     <!-- MATERIAL SEGMENTED SELECTOR -->
-    <div class="ios-segmented-control-container" id="materialSegmentedControl">
-      <!-- Generated dynamically (ATL90M, ATS20, PPL20DM, PPS50277) -->
-    </div>
+    <div class="ios-segmented-control-container" id="materialSegmentedControl"></div>
 
-    <!-- MAIN VIEW -->
+    <!-- TAB 1: MAIN CALCULATOR VIEW -->
     <main id="calcView">
       
       <!-- HERO WEIGHT INPUT CARD -->
       <div class="ios-hero-weight-card">
         <div class="ios-weight-header">
-          <span style="font-size: 13px; font-weight: 600; text-transform: uppercase; color: var(--ios-secondary-label); letter-spacing: -0.01em;">Готовый раствор</span>
+          <span style="font-size: 13px; font-weight: 650; text-transform: uppercase; color: var(--ios-secondary-label); letter-spacing: -0.01em;">Готовый раствор</span>
           <button class="ios-pill-btn" style="padding: 4px 10px; font-size: 12px; color: var(--ios-red);" onclick="setWeight(0)">Сброс</button>
         </div>
 
@@ -853,21 +841,17 @@
       <!-- RANGE TUNER (VISCOSITY / HARDENER RANGE) -->
       <div id="rangeTunerSection" class="ios-section hidden">
         <div class="ios-section-header"><span>Параметры вязкости</span></div>
-        <div class="ios-grouped-card" id="rangeTunerContainer">
-          <!-- Populated dynamically -->
-        </div>
+        <div class="ios-grouped-card" id="rangeTunerContainer"></div>
       </div>
 
       <!-- INSET GROUPED COMPONENTS BREAKDOWN -->
       <div class="ios-section">
         <div class="ios-section-header">
           <span>Граммовка компонентов</span>
-          <span id="headerTotalText" style="color: var(--ios-label); font-weight: 700;">250.0 г</span>
+          <span id="headerTotalText" style="color: var(--ios-label); font-weight: 750;">250.0 г</span>
         </div>
 
-        <div class="ios-grouped-card" id="componentsList">
-          <!-- Inset Table items -->
-        </div>
+        <div class="ios-grouped-card" id="componentsList"></div>
 
         <div class="ios-section-footer">
           Значение <strong>«На весах»</strong> — нарастающий итог. Наливайте каждый компонент один за другим без промежуточного сброса тары.
@@ -888,20 +872,23 @@
 
     </main>
 
-    <!-- RECIPES / TECH CARDS MANAGER -->
+    <!-- TAB 2: RECIPES / TECH CARDS MANAGER & INSPECTOR -->
     <section id="recipeManagerView" class="hidden">
       <div class="ios-section">
         <div class="ios-section-header">
-          <span>Все технологические карты</span>
-          <button style="background:none; border:none; color:var(--ios-blue); font-size:13px; font-weight:700; cursor:pointer;" onclick="openAddRecipeModal()">+ Создать</button>
+          <span>Технологические карты</span>
+          <button style="background:none; border:none; color:var(--ios-blue); font-size:13.5px; font-weight:700; cursor:pointer;" onclick="openCreateRecipeModal()">+ Создать карту</button>
         </div>
         <div class="ios-grouped-card" id="allRecipesList">
           <!-- Populated dynamically -->
         </div>
+        <div class="ios-section-footer">
+          Нажмите на любую карту, чтобы просмотреть подробный состав, изменить пропорции, название или компоненты.
+        </div>
       </div>
     </section>
 
-    <!-- SETTINGS & BACKUP VIEW -->
+    <!-- TAB 3: SETTINGS & BACKUP VIEW -->
     <section id="settingsView" class="hidden">
       <div class="ios-section">
         <div class="ios-section-header"><span>Резервное копирование</span></div>
@@ -957,7 +944,7 @@
               </div>
               <div class="ios-cell-texts">
                 <span class="ios-cell-title">Малярные карты Pro</span>
-                <span class="ios-cell-subtitle">Версия 2.0 • 100% Офлайн PWA</span>
+                <span class="ios-cell-subtitle">Офлайн PWA для iPhone 14/15/16 Pro Max</span>
               </div>
             </div>
           </div>
@@ -967,21 +954,60 @@
 
   </div>
 
-  <!-- APPLE TAB BAR -->
-  <nav class="ios-tabbar">
-    <button class="ios-tab-item active" id="tabCalc" onclick="switchTab('calc')">
-      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6 14H7v-2h6v2zm4-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-      <span>Калькулятор</span>
-    </button>
-    <button class="ios-tab-item" id="tabRecipes" onclick="switchTab('recipes')">
-      <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
-      <span>Техкарты</span>
-    </button>
-    <button class="ios-tab-item" id="tabSettings" onclick="switchTab('settings')">
-      <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-      <span>Настройки</span>
-    </button>
-  </nav>
+  <!-- APPLE FLOATING DOCK (Fixed & Perfectly Centered Across All Tabs) -->
+  <div class="ios-dock-wrapper">
+    <nav class="ios-dock">
+      <button class="ios-dock-item active" id="tabCalc" onclick="switchTab('calc')">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6 14H7v-2h6v2zm4-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        <span>Калькулятор</span>
+      </button>
+      <button class="ios-dock-item" id="tabRecipes" onclick="switchTab('recipes')">
+        <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+        <span>Техкарты</span>
+      </button>
+      <button class="ios-dock-item" id="tabSettings" onclick="switchTab('settings')">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        <span>Настройки</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODAL: TECH CARD INSPECTOR & EDITOR -->
+  <div id="recipeInspectorModal" class="ios-sheet-overlay" onclick="closeModal('recipeInspectorModal')">
+    <div class="ios-sheet" onclick="event.stopPropagation()">
+      <div class="ios-sheet-grabber"></div>
+      <div class="ios-sheet-header">
+        <h3 class="ios-sheet-title" id="inspectorModalTitle">Редактирование карты</h3>
+        <button class="ios-sheet-close" onclick="closeModal('recipeInspectorModal')">✕</button>
+      </div>
+
+      <div class="ios-form-row">
+        <label class="ios-form-label">Код материала (для быстрого выбора)</label>
+        <input type="text" id="inspectorRecipeCode" class="ios-input" placeholder="Например: ATL90M">
+      </div>
+
+      <div class="ios-form-row">
+        <label class="ios-form-label">Полное название</label>
+        <input type="text" id="inspectorRecipeName" class="ios-input" placeholder="Например: ATL90M — Лак акриловый 20гл">
+      </div>
+
+      <div class="ios-form-row">
+        <label class="ios-form-label">Категория</label>
+        <input type="text" id="inspectorRecipeCategory" class="ios-input" placeholder="Лак, Грунт, Эмаль...">
+      </div>
+
+      <div class="ios-section" style="margin-top:16px;">
+        <div class="ios-section-header">
+          <span>Компоненты на 100 г базы</span>
+          <button style="background:none; border:none; color:var(--ios-blue); font-size:13px; font-weight:700;" onclick="addInspectorComponentRow()">+ Добавить</button>
+        </div>
+        <div id="inspectorComponentsRows"></div>
+      </div>
+
+      <button class="ios-btn ios-btn-primary" style="width:100%; margin-top:8px;" onclick="saveInspectorRecipe()">Сохранить изменения</button>
+      <button class="ios-btn ios-btn-secondary" id="inspectorSelectBtn" style="width:100%; margin-top:8px;" onclick="useInspectedRecipe()">Выбрать в калькуляторе</button>
+    </div>
+  </div>
 
   <!-- MODAL: STEP-BY-STEP POURING GUIDE -->
   <div id="stepGuideModal" class="ios-sheet-overlay" onclick="closeModal('stepGuideModal')">
@@ -1017,7 +1043,7 @@
       </div>
 
       <p style="font-size:13px; color:var(--ios-secondary-label); margin-bottom:14px; line-height:1.4;">
-        Введите фактический вес на весах — калькулятор автоматически пересчитает остальные компоненты под идеальную пропорцию.
+        Введите фактический вес на весах — калькулятор автоматически пересчитает остальные компоненты под идеальную химическую пропорцию.
       </p>
 
       <div class="ios-form-row">
@@ -1031,37 +1057,6 @@
       </div>
 
       <button class="ios-btn ios-btn-primary" style="width:100%; margin-top:10px;" onclick="applyOverpourRecalculation()">Пересчитать раствор</button>
-    </div>
-  </div>
-
-  <!-- MODAL: CREATE / EDIT RECIPE -->
-  <div id="recipeEditModal" class="ios-sheet-overlay" onclick="closeModal('recipeEditModal')">
-    <div class="ios-sheet" onclick="event.stopPropagation()">
-      <div class="ios-sheet-grabber"></div>
-      <div class="ios-sheet-header">
-        <h3 class="ios-sheet-title" id="editModalTitle">Новая техкарта</h3>
-        <button class="ios-sheet-close" onclick="closeModal('recipeEditModal')">✕</button>
-      </div>
-
-      <div class="ios-form-row">
-        <label class="ios-form-label">Код и название</label>
-        <input type="text" id="editRecipeName" class="ios-input" placeholder="Например: ATL90M Лак акриловый">
-      </div>
-
-      <div class="ios-form-row">
-        <label class="ios-form-label">Категория</label>
-        <input type="text" id="editRecipeCategory" class="ios-input" placeholder="Лак, Грунт, Эмаль...">
-      </div>
-
-      <div class="ios-section" style="margin-top:16px;">
-        <div class="ios-section-header">
-          <span>Компоненты на 100 г базы</span>
-          <button style="background:none; border:none; color:var(--ios-blue); font-size:13px; font-weight:700;" onclick="addComponentRow()">+ Добавить</button>
-        </div>
-        <div id="editComponentsRows"></div>
-      </div>
-
-      <button class="ios-btn ios-btn-primary" style="width:100%;" onclick="saveCurrentRecipeForm()">Сохранить техкарту</button>
     </div>
   </div>
 
@@ -1121,9 +1116,10 @@
     let currentStepIdx = 0;
     let wakeLock = null;
     let activeRanges = {};
+    let inspectingRecipeId = null;
 
     function init() {
-      const saved = localStorage.getItem('painter_recipes_ios_v3');
+      const saved = localStorage.getItem('painter_recipes_ios_v4');
       if (saved) {
         try {
           recipes = JSON.parse(saved);
@@ -1135,7 +1131,7 @@
         saveRecipes();
       }
 
-      const savedSelectedId = localStorage.getItem('painter_selected_ios_v3');
+      const savedSelectedId = localStorage.getItem('painter_selected_ios_v4');
       if (savedSelectedId && recipes.some(r => r.id === savedSelectedId)) {
         currentRecipeId = savedSelectedId;
       } else {
@@ -1156,14 +1152,14 @@
     }
 
     function saveRecipes() {
-      localStorage.setItem('painter_recipes_ios_v3', JSON.stringify(recipes));
+      localStorage.setItem('painter_recipes_ios_v4', JSON.stringify(recipes));
     }
 
     function getCurrentRecipe() {
       return recipes.find(r => r.id === currentRecipeId) || recipes[0];
     }
 
-    // --- SEGMENTED CONTROL ---
+    // --- TOP SEGMENTED CONTROL ---
     function renderSegmentedControl() {
       const container = document.getElementById('materialSegmentedControl');
       container.innerHTML = '';
@@ -1186,7 +1182,7 @@
     function selectRecipe(id) {
       triggerHaptic();
       currentRecipeId = id;
-      localStorage.setItem('painter_selected_ios_v3', id);
+      localStorage.setItem('painter_selected_ios_v4', id);
       activeRanges = {};
       renderSegmentedControl();
       updateRecipeUI();
@@ -1249,7 +1245,7 @@
       calculate();
     }
 
-    // --- CORE CALCULATION ENGINE ---
+    // --- CALCULATION ENGINE ---
     function calculate() {
       const recipe = getCurrentRecipe();
       const targetWeight = parseFloat(document.getElementById('targetWeightInput').value) || 0;
@@ -1286,7 +1282,6 @@
           cumulative: cumulative
         });
 
-        // Apple Badge colors & icons
         let badgeClass = 'badge-blue';
         let svgIcon = '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>';
         if (comp.type === 'hardener') {
@@ -1325,7 +1320,6 @@
       document.getElementById('headerTotalText').textContent = `${targetWeight.toFixed(1)} г`;
     }
 
-    // --- WEIGHT HELPERS ---
     function setWeight(val) {
       triggerHaptic();
       document.getElementById('targetWeightInput').value = val > 0 ? val : '';
@@ -1394,7 +1388,7 @@
       }
     }
 
-    // --- OVERPOUR RECALCULATION ---
+    // --- OVERPOUR MODAL ---
     function openOverpourModal() {
       const select = document.getElementById('overpourCompSelect');
       select.innerHTML = '';
@@ -1437,7 +1431,7 @@
       triggerHaptic();
     }
 
-    // --- RECIPES LIST VIEW ---
+    // --- RECIPES TAB & INSPECTOR / EDITOR ---
     function renderAllRecipesList() {
       const list = document.getElementById('allRecipesList');
       list.innerHTML = '';
@@ -1447,8 +1441,11 @@
 
         const cell = document.createElement('div');
         cell.className = 'ios-cell';
+        cell.style.cursor = 'pointer';
+        cell.onclick = () => openInspectorModal(r.id);
+
         cell.innerHTML = `
-          <div class="ios-cell-left" style="cursor:pointer;" onclick="selectRecipeAndSwitch('${r.id}')">
+          <div class="ios-cell-left">
             <div class="ios-icon-badge badge-blue">
               <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
             </div>
@@ -1457,76 +1454,105 @@
               <span class="ios-cell-subtitle">${escapeHtml(partsStr)}</span>
             </div>
           </div>
-          <button class="ios-pill-btn" style="color:var(--ios-red); padding:4px 8px;" onclick="deleteRecipe('${r.id}')">Удалить</button>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12px; font-weight:700; color:var(--ios-blue);">Открыть ▾</span>
+          </div>
         `;
         list.appendChild(cell);
       });
     }
 
-    function selectRecipeAndSwitch(id) {
-      selectRecipe(id);
-      switchTab('calc');
+    function openInspectorModal(recipeId) {
+      triggerHaptic();
+      inspectingRecipeId = recipeId;
+      const r = recipes.find(item => item.id === recipeId);
+      if (!r) return;
+
+      document.getElementById('inspectorModalTitle').textContent = 'Техкарта: ' + (r.code || r.name);
+      document.getElementById('inspectorRecipeCode').value = r.code || r.name.split(' ')[0] || '';
+      document.getElementById('inspectorRecipeName').value = r.name;
+      document.getElementById('inspectorRecipeCategory').value = r.category || '';
+
+      const container = document.getElementById('inspectorComponentsRows');
+      container.innerHTML = '';
+
+      r.components.forEach(c => {
+        addInspectorComponentRow(c.name, c.parts, c.range ? c.range.join(', ') : '');
+      });
+
+      openModal('recipeInspectorModal');
     }
 
-    function deleteRecipe(id) {
-      if (recipes.length <= 1) {
-        alert('Нельзя удалить последнюю карту');
-        return;
-      }
-      if (confirm('Удалить эту технологическую карту?')) {
-        recipes = recipes.filter(r => r.id !== id);
-        if (currentRecipeId === id) currentRecipeId = recipes[0].id;
-        saveRecipes();
-        renderSegmentedControl();
-        renderAllRecipesList();
-        updateRecipeUI();
-        calculate();
-      }
+    function openCreateRecipeModal() {
+      triggerHaptic();
+      inspectingRecipeId = null;
+      document.getElementById('inspectorModalTitle').textContent = 'Новая техкарта';
+      document.getElementById('inspectorRecipeCode').value = '';
+      document.getElementById('inspectorRecipeName').value = '';
+      document.getElementById('inspectorRecipeCategory').value = 'Лак';
+
+      const container = document.getElementById('inspectorComponentsRows');
+      container.innerHTML = '';
+      addInspectorComponentRow('База', 100, '');
+      addInspectorComponentRow('Отвердитель', 20, '10, 20');
+      addInspectorComponentRow('Разбавитель', 20, '10, 20, 30');
+
+      openModal('recipeInspectorModal');
     }
 
-    function openAddRecipeModal() {
-      document.getElementById('editRecipeName').value = '';
-      document.getElementById('editRecipeCategory').value = 'Лак';
-      const rows = document.getElementById('editComponentsRows');
-      rows.innerHTML = '';
-      addComponentRow('База', 'base', 100);
-      addComponentRow('Отвердитель', 'hardener', 20);
-      addComponentRow('Разбавитель', 'thinner', 20);
-      openModal('recipeEditModal');
-    }
-
-    function addComponentRow(name = 'Компонент', type = 'thinner', parts = 10) {
-      const rows = document.getElementById('editComponentsRows');
+    function addInspectorComponentRow(name = 'Компонент', parts = 10, rangeStr = '') {
+      const container = document.getElementById('inspectorComponentsRows');
       const div = document.createElement('div');
-      div.style.display = 'grid';
-      div.style.gridTemplateColumns = '2fr 1fr 34px';
-      div.style.gap = '8px';
-      div.style.alignItems = 'center';
+      div.className = 'inspector-comp-row';
+      div.style.background = 'var(--ios-card-secondary)';
+      div.style.borderRadius = '12px';
+      div.style.padding = '10px 12px';
       div.style.marginBottom = '8px';
+      div.style.border = '0.5px solid var(--ios-separator)';
+
       div.innerHTML = `
-        <input type="text" class="ios-input comp-name" placeholder="Название" value="${escapeHtml(name)}">
-        <input type="number" inputmode="decimal" class="ios-input comp-parts" placeholder="Грамм" value="${parts}">
-        <button type="button" class="ios-pill-btn" style="color:var(--ios-red);" onclick="this.parentElement.remove()">✕</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <input type="text" class="ios-input comp-name-input" placeholder="Название компонента" value="${escapeHtml(name)}" style="font-weight:700; font-size:14px; padding:6px 8px; flex:1; margin-right:8px;">
+          <button type="button" class="ios-pill-btn" style="color:var(--ios-red); padding:4px 8px;" onclick="this.closest('.inspector-comp-row').remove()">Удалить</button>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:8px;">
+          <div>
+            <span style="font-size:10px; color:var(--ios-secondary-label); font-weight:700; text-transform:uppercase;">Грамм на 100г базы</span>
+            <input type="number" inputmode="decimal" class="ios-input comp-parts-input" placeholder="100" value="${parts}" style="font-size:14px; padding:6px 8px;">
+          </div>
+          <div>
+            <span style="font-size:10px; color:var(--ios-secondary-label); font-weight:700; text-transform:uppercase;">Диапазон (через запятую)</span>
+            <input type="text" class="ios-input comp-range-input" placeholder="10, 15, 20" value="${escapeHtml(rangeStr)}" style="font-size:14px; padding:6px 8px;">
+          </div>
+        </div>
       `;
-      rows.appendChild(div);
+      container.appendChild(div);
     }
 
-    function saveCurrentRecipeForm() {
-      const name = document.getElementById('editRecipeName').value.trim();
-      const category = document.getElementById('editRecipeCategory').value.trim() || 'Материал';
+    function saveInspectorRecipe() {
+      const code = document.getElementById('inspectorRecipeCode').value.trim();
+      const name = document.getElementById('inspectorRecipeName').value.trim();
+      const category = document.getElementById('inspectorRecipeCategory').value.trim() || 'Материал';
 
       if (!name) {
-        alert('Введите название техкарты');
+        alert('Введите название карты');
         return;
       }
 
-      const rows = document.querySelectorAll('#editComponentsRows > div');
+      const rows = document.querySelectorAll('#inspectorComponentsRows .inspector-comp-row');
       const components = [];
 
       rows.forEach((row, idx) => {
-        const cName = row.querySelector('.comp-name').value.trim() || `Компонент ${idx + 1}`;
-        const cParts = parseFloat(row.querySelector('.comp-parts').value) || 0;
-        
+        const cName = row.querySelector('.comp-name-input').value.trim() || `Компонент ${idx + 1}`;
+        const cParts = parseFloat(row.querySelector('.comp-parts-input').value) || 0;
+        const rangeText = row.querySelector('.comp-range-input').value.trim();
+
+        let rangeArr = undefined;
+        if (rangeText) {
+          rangeArr = rangeText.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+          if (rangeArr.length <= 1) rangeArr = undefined;
+        }
+
         let cType = 'thinner';
         const lower = cName.toLowerCase();
         if (lower.includes('баз') || lower.includes('лак') || lower.includes('грунт') || lower.includes('эмал') || idx === 0) cType = 'base';
@@ -1535,7 +1561,9 @@
         else if (lower.includes('добав') || lower.includes('пластиф') || lower.includes('эласт')) cType = 'additive';
 
         if (cParts > 0) {
-          components.push({ name: cName, type: cType, parts: cParts });
+          const compObj = { name: cName, type: cType, parts: cParts };
+          if (rangeArr) compObj.range = rangeArr;
+          components.push(compObj);
         }
       });
 
@@ -1544,23 +1572,41 @@
         return;
       }
 
-      const codeMatch = name.match(/^[A-Za-z0-9]+/);
-      const code = codeMatch ? codeMatch[0] : name.split(' ')[0];
+      const finalCode = code || name.match(/^[A-Za-z0-9]+/)?.[0] || name.split(' ')[0];
 
-      const newId = 'rec_' + Date.now();
-      recipes.push({ id: newId, code, name, category, components });
-      currentRecipeId = newId;
+      if (inspectingRecipeId) {
+        const existing = recipes.find(item => item.id === inspectingRecipeId);
+        if (existing) {
+          existing.code = finalCode;
+          existing.name = name;
+          existing.category = category;
+          existing.components = components;
+        }
+      } else {
+        const newId = 'rec_' + Date.now();
+        recipes.push({ id: newId, code: finalCode, name, category, components });
+        inspectingRecipeId = newId;
+        currentRecipeId = newId;
+      }
 
       saveRecipes();
       renderSegmentedControl();
       renderAllRecipesList();
       updateRecipeUI();
       calculate();
-      closeModal('recipeEditModal');
+      closeModal('recipeInspectorModal');
       triggerHaptic();
     }
 
-    // --- TABS ---
+    function useInspectedRecipe() {
+      if (inspectingRecipeId) {
+        selectRecipe(inspectingRecipeId);
+        closeModal('recipeInspectorModal');
+        switchTab('calc');
+      }
+    }
+
+    // --- TAB SWITCHING (FIXED DOCK) ---
     function switchTab(tabId) {
       document.getElementById('calcView').classList.add('hidden');
       document.getElementById('recipeManagerView').classList.add('hidden');
@@ -1570,16 +1616,21 @@
       document.getElementById('tabRecipes').classList.remove('active');
       document.getElementById('tabSettings').classList.remove('active');
 
+      const titleEl = document.getElementById('pageMainTitle');
+
       if (tabId === 'calc') {
         document.getElementById('calcView').classList.remove('hidden');
         document.getElementById('tabCalc').classList.add('active');
+        titleEl.textContent = 'Калькулятор';
       } else if (tabId === 'recipes') {
         document.getElementById('recipeManagerView').classList.remove('hidden');
         document.getElementById('tabRecipes').classList.add('active');
+        titleEl.textContent = 'Техкарты';
         renderAllRecipesList();
       } else if (tabId === 'settings') {
         document.getElementById('settingsView').classList.remove('hidden');
         document.getElementById('tabSettings').classList.add('active');
+        titleEl.textContent = 'Настройки';
       }
       triggerHaptic();
     }
@@ -1645,7 +1696,7 @@
             renderAllRecipesList();
             updateRecipeUI();
             calculate();
-            alert('Техкарты импортированы!');
+            alert('Техкарты успешно импортированы!');
           }
         } catch (err) {
           alert('Ошибка при чтении файла');
