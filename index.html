@@ -15,7 +15,7 @@
 
   <style>
     /* ==========================================================================
-       APPLE iOS DESIGN SYSTEM (HIG) - iOS 18/26 Theme + Floating Dock
+       APPLE iOS DESIGN SYSTEM (HIG) - iPhone 14 Pro Max & All iPhones
        ========================================================================== */
     :root {
       /* Dark Theme (Default) */
@@ -45,10 +45,10 @@
       --ios-indigo: #5e5ce6;
       --ios-gray: #8e8e93;
 
-      /* Floating Dock styling */
-      --dock-bg: rgba(36, 36, 40, 0.75);
-      --dock-border: rgba(255, 255, 255, 0.2);
-      --dock-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.3);
+      /* Dock Colors */
+      --dock-bg: rgba(36, 36, 40, 0.78);
+      --dock-border: rgba(255, 255, 255, 0.22);
+      --dock-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
 
       --safe-top: env(safe-area-inset-top, 20px);
       --safe-bottom: env(safe-area-inset-bottom, 20px);
@@ -82,9 +82,9 @@
       --ios-indigo: #5856d6;
       --ios-gray: #8e8e93;
 
-      --dock-bg: rgba(240, 240, 245, 0.82);
-      --dock-border: rgba(0, 0, 0, 0.12);
-      --dock-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+      --dock-bg: rgba(242, 242, 247, 0.85);
+      --dock-border: rgba(0, 0, 0, 0.14);
+      --dock-shadow: 0 16px 36px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     * {
@@ -101,31 +101,40 @@
       -webkit-user-select: text;
     }
 
-    html, body {
-      width: 100%;
-      min-height: 100%;
+    html {
+      height: 100%;
       background-color: var(--ios-bg-grouped);
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
       color: var(--ios-label);
-      min-height: 100vh;
+      background-color: var(--ios-bg-grouped);
+      min-height: 100%;
+      min-height: 100dvh;
       min-height: -webkit-fill-available;
-      padding-top: calc(var(--safe-top) + 10px);
-      padding-bottom: calc(var(--safe-bottom) + 115px); /* Space for floating dock */
+      padding-top: calc(var(--safe-top) + 12px);
+      padding-bottom: calc(var(--safe-bottom) + 110px); /* Generous space above fixed dock */
       padding-left: max(16px, var(--safe-left));
       padding-right: max(16px, var(--safe-right));
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      position: relative;
     }
 
-    /* Full responsive layout container (optimally sized for iPhone 14/15/16 Pro Max & mini) */
+    /* Container perfectly proportioned for iPhone 14 Pro Max (430px logical width) */
     .app-viewport {
       width: 100%;
-      max-width: 480px;
+      max-width: 440px;
       margin: 0 auto;
+      min-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 120px);
+    }
+
+    /* View containers */
+    .view-container {
+      width: 100%;
+      min-height: 100%;
     }
 
     /* ==========================================================================
@@ -135,7 +144,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 0 10px 0;
+      padding: 4px 0 12px 0;
       margin-bottom: 8px;
     }
 
@@ -145,7 +154,7 @@
     }
 
     .ios-sub-caption {
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -154,7 +163,7 @@
     }
 
     .ios-large-title {
-      font-size: 30px;
+      font-size: 32px;
       font-weight: 800;
       letter-spacing: -0.03em;
       line-height: 1.1;
@@ -219,7 +228,7 @@
       flex: 1;
       min-width: 86px;
       text-align: center;
-      padding: 8px 8px;
+      padding: 8px 6px;
       font-size: 13px;
       font-weight: 600;
       color: var(--ios-secondary-label);
@@ -235,13 +244,13 @@
     }
 
     .ios-segment-item span.segment-code {
-      font-size: 13.5px;
-      font-weight: 750;
+      font-size: 14px;
+      font-weight: 800;
       letter-spacing: -0.01em;
     }
 
     .ios-segment-item span.segment-sub {
-      font-size: 9px;
+      font-size: 9.5px;
       font-weight: 600;
       opacity: 0.85;
       text-transform: uppercase;
@@ -287,7 +296,7 @@
     .ios-big-input {
       background: transparent;
       border: none;
-      font-size: 52px;
+      font-size: 54px;
       font-weight: 900;
       color: var(--ios-label);
       letter-spacing: -0.04em;
@@ -555,34 +564,30 @@
     }
 
     /* ==========================================================================
-       APPLE FLOATING DOCK (iOS Home Screen Dock Style)
+       APPLE FLOATING DOCK - ROCK SOLID FIXED AT EQUAL BOTTOM & SIDE MARGINS
        ========================================================================== */
-    .ios-dock-wrapper {
-      position: fixed;
-      bottom: calc(var(--safe-bottom) + 12px);
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      pointer-events: none;
-      z-index: 900;
-    }
-
     .ios-dock {
-      pointer-events: auto;
+      position: fixed;
+      bottom: calc(var(--safe-bottom) + 16px);
+      left: 16px;
+      right: 16px;
+      max-width: 408px;
+      margin: 0 auto;
+      height: 66px;
       background: var(--dock-bg);
-      backdrop-filter: blur(30px) saturate(200%);
-      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
       border: 0.5px solid var(--dock-border);
       box-shadow: var(--dock-shadow);
-      border-radius: 36px;
-      padding: 6px 14px;
+      border-radius: 34px;
+      padding: 5px 12px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      width: calc(100% - 36px);
-      max-width: 370px;
-      height: 66px;
+      justify-content: space-between;
+      gap: 4px;
+      z-index: 9999;
+      transform: translate3d(0, 0, 0);
+      -webkit-transform: translate3d(0, 0, 0);
     }
 
     .ios-dock-item {
@@ -595,20 +600,19 @@
       background: transparent;
       border: none;
       color: var(--ios-secondary-label);
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 650;
       letter-spacing: -0.01em;
       cursor: pointer;
       padding: 6px 4px;
       border-radius: 20px;
-      transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: color 0.15s, transform 0.15s;
     }
 
     .ios-dock-item svg {
       width: 22px;
       height: 22px;
       fill: currentColor;
-      transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .ios-dock-item.active {
@@ -617,10 +621,6 @@
 
     .ios-dock-item:active {
       transform: scale(0.92);
-    }
-
-    .ios-dock-item.active svg {
-      transform: scale(1.08);
     }
 
     /* ==========================================================================
@@ -635,7 +635,7 @@
       background: rgba(0, 0, 0, 0.68);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      z-index: 1000;
+      z-index: 10000;
       display: none;
       align-items: flex-end;
       justify-content: center;
@@ -649,7 +649,7 @@
       background: var(--ios-card);
       border-radius: 24px 24px 0 0;
       width: 100%;
-      max-width: 480px;
+      max-width: 440px;
       max-height: 88vh;
       padding: 12px 20px calc(var(--safe-bottom) + 30px) 20px;
       overflow-y: auto;
@@ -804,7 +804,7 @@
     <div class="ios-segmented-control-container" id="materialSegmentedControl"></div>
 
     <!-- TAB 1: MAIN CALCULATOR VIEW -->
-    <main id="calcView">
+    <main id="calcView" class="view-container">
       
       <!-- HERO WEIGHT INPUT CARD -->
       <div class="ios-hero-weight-card">
@@ -873,15 +873,13 @@
     </main>
 
     <!-- TAB 2: RECIPES / TECH CARDS MANAGER & INSPECTOR -->
-    <section id="recipeManagerView" class="hidden">
+    <section id="recipeManagerView" class="view-container hidden">
       <div class="ios-section">
         <div class="ios-section-header">
           <span>Технологические карты</span>
           <button style="background:none; border:none; color:var(--ios-blue); font-size:13.5px; font-weight:700; cursor:pointer;" onclick="openCreateRecipeModal()">+ Создать карту</button>
         </div>
-        <div class="ios-grouped-card" id="allRecipesList">
-          <!-- Populated dynamically -->
-        </div>
+        <div class="ios-grouped-card" id="allRecipesList"></div>
         <div class="ios-section-footer">
           Нажмите на любую карту, чтобы просмотреть подробный состав, изменить пропорции, название или компоненты.
         </div>
@@ -889,7 +887,7 @@
     </section>
 
     <!-- TAB 3: SETTINGS & BACKUP VIEW -->
-    <section id="settingsView" class="hidden">
+    <section id="settingsView" class="view-container hidden">
       <div class="ios-section">
         <div class="ios-section-header"><span>Резервное копирование</span></div>
         <div class="ios-grouped-card">
@@ -954,23 +952,21 @@
 
   </div>
 
-  <!-- APPLE FLOATING DOCK (Fixed & Perfectly Centered Across All Tabs) -->
-  <div class="ios-dock-wrapper">
-    <nav class="ios-dock">
-      <button class="ios-dock-item active" id="tabCalc" onclick="switchTab('calc')">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6 14H7v-2h6v2zm4-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-        <span>Калькулятор</span>
-      </button>
-      <button class="ios-dock-item" id="tabRecipes" onclick="switchTab('recipes')">
-        <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
-        <span>Техкарты</span>
-      </button>
-      <button class="ios-dock-item" id="tabSettings" onclick="switchTab('settings')">
-        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        <span>Настройки</span>
-      </button>
-    </nav>
-  </div>
+  <!-- APPLE FLOATING DOCK (Direct Fixed Positioned at Equal Margins) -->
+  <nav class="ios-dock">
+    <button class="ios-dock-item active" id="tabCalc" onclick="switchTab('calc')">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6 14H7v-2h6v2zm4-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      <span>Калькулятор</span>
+    </button>
+    <button class="ios-dock-item" id="tabRecipes" onclick="switchTab('recipes')">
+      <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+      <span>Техкарты</span>
+    </button>
+    <button class="ios-dock-item" id="tabSettings" onclick="switchTab('settings')">
+      <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      <span>Настройки</span>
+    </button>
+  </nav>
 
   <!-- MODAL: TECH CARD INSPECTOR & EDITOR -->
   <div id="recipeInspectorModal" class="ios-sheet-overlay" onclick="closeModal('recipeInspectorModal')">
@@ -1119,7 +1115,7 @@
     let inspectingRecipeId = null;
 
     function init() {
-      const saved = localStorage.getItem('painter_recipes_ios_v4');
+      const saved = localStorage.getItem('painter_recipes_ios_v5');
       if (saved) {
         try {
           recipes = JSON.parse(saved);
@@ -1131,7 +1127,7 @@
         saveRecipes();
       }
 
-      const savedSelectedId = localStorage.getItem('painter_selected_ios_v4');
+      const savedSelectedId = localStorage.getItem('painter_selected_ios_v5');
       if (savedSelectedId && recipes.some(r => r.id === savedSelectedId)) {
         currentRecipeId = savedSelectedId;
       } else {
@@ -1152,7 +1148,7 @@
     }
 
     function saveRecipes() {
-      localStorage.setItem('painter_recipes_ios_v4', JSON.stringify(recipes));
+      localStorage.setItem('painter_recipes_ios_v5', JSON.stringify(recipes));
     }
 
     function getCurrentRecipe() {
@@ -1182,7 +1178,7 @@
     function selectRecipe(id) {
       triggerHaptic();
       currentRecipeId = id;
-      localStorage.setItem('painter_selected_ios_v4', id);
+      localStorage.setItem('painter_selected_ios_v5', id);
       activeRanges = {};
       renderSegmentedControl();
       updateRecipeUI();
