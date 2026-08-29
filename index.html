@@ -818,9 +818,6 @@
             <input type="number" inputmode="decimal" id="targetWeightInput" class="ios-big-input" placeholder="0" value="250" oninput="calculate()">
             <span class="ios-big-unit">г</span>
           </div>
-          <span id="activeFormulaBadge" style="font-size: 13px; font-weight: 700; color: var(--ios-blue); background: var(--ios-fill-tertiary); padding: 6px 10px; border-radius: 8px;">
-            100 : 15 : 25
-          </span>
         </div>
 
         <!-- Quick Weight Pills -->
@@ -1225,7 +1222,6 @@
         }
       });
 
-      document.getElementById('activeFormulaBadge').textContent = formulaParts.join(' : ');
 
       if (hasRanges) {
         tunerSection.classList.remove('hidden');
