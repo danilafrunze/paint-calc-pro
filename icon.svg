@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Rounded App Icon Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  <rect width="504" height="504" x="4" y="4" rx="108" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="6"/>
+
+  <!-- Subtle grid / tech background -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="rgba(56, 189, 248, 0.15)" stroke-width="3" stroke-dasharray="8 8"/>
+  <circle cx="256" cy="256" r="130" fill="none" stroke="rgba(56, 189, 248, 0.1)" stroke-width="2"/>
+
+  <!-- Paint Spray Gun & Mixing Flask Symbol -->
+  <!-- Flask / Mixing Cup -->
+  <path d="M190 140 L322 140 L350 340 A45 45 0 0 1 305 390 L207 390 A45 45 0 0 1 162 340 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="12" stroke-linejoin="round"/>
+  
+  <!-- Liquid levels in cup -->
+  <!-- Base layer -->
+  <path d="M172 320 L340 320 L347 345 A45 45 0 0 1 305 390 L207 390 A45 45 0 0 1 165 345 Z" fill="url(#accentGrad)" opacity="0.9"/>
+  <!-- Hardener layer -->
+  <path d="M182 260 L330 260 L339 315 L173 315 Z" fill="url(#goldGrad)" opacity="0.85"/>
+  <!-- Thinner layer -->
+  <path d="M192 205 L320 205 L328 255 L184 255 Z" fill="#34d399" opacity="0.85"/>
+
+  <!-- Measuring Marks on Cup -->
+  <line x1="195" y1="205" x2="225" y2="205" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+  <line x1="185" y1="260" x2="225" y2="260" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+  <line x1="175" y1="320" x2="225" y2="320" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Ratio Text Badge: 2:1:10% -->
+  <rect x="136" y="70" width="240" height="52" rx="26" fill="#0f172a" stroke="url(#accentGrad)" stroke-width="4"/>
+  <text x="256" y="106" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">PRO • ВЕСЫ</text>
+
+  <!-- Precision Grams Badge on Bottom -->
+  <circle cx="390" cy="380" r="64" fill="#0f172a" stroke="url(#goldGrad)" stroke-width="6" filter="url(#glow)"/>
+  <text x="390" y="375" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="900" fill="#38bdf8" text-anchor="middle">g</text>
+  <text x="390" y="405" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" fill="#94a3b8" text-anchor="middle">0.1г</text>
+</svg>
