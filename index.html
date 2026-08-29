@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Малярка">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="format-detection" content="telephone=no">
+  <title>Маляр Калькулятор Pro — Расчёт граммовок</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --bg-card: #141c2e;
+      --bg-card-elevated: #1e293b;
+      --bg-input: #0f172a;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --border-focus: #38bdf8;
+      
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --primary-glow: rgba(56, 189, 248, 0.25);
+      
+      --accent-base: #38bdf8;
+      --accent-hardener: #f59e0b;
+      --accent-thinner: #10b981;
+      --accent-additive: #a855f7;
+      --danger: #ef4444;
+      --success: #22c55e;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .light-theme {
+      --bg: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-elevated: #f8fafc;
+      --bg-input: #f1f5f9;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+      --border-focus: #0284c7;
+      --primary: #0284c7;
+      --primary-glow: rgba(2, 132, 199, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    input, textarea, select {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      padding-top: calc(var(--safe-top) + 12px);
+      padding-bottom: calc(var(--safe-bottom) + 84px);
+      padding-left: 16px;
+      padding-right: 16px;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding: 4px 0;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: #fff;
+    }
+
+    .logo-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .logo-text span {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .icon-btn.active {
+      background: var(--primary);
+      color: #0b0f19;
+      border-color: var(--primary);
+    }
+
+    .icon-btn:active {
+      transform: scale(0.92);
+    }
+
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Quick Tech Card Selector Chips */
+    .tech-chips-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tech-chips-scroll::-webkit-scrollbar { display: none; }
+
+    .tech-chip {
+      background: var(--bg-card-elevated);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 8px 14px;
+      white-space: nowrap;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .tech-chip.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .tech-chip span.chip-code {
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .tech-chip span.chip-desc {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .tech-chip.active span.chip-desc {
+      color: var(--text);
+    }
+
+    /* Recipe Selector Button */
+    .recipe-selector-btn {
+      width: 100%;
+      background: var(--bg-card-elevated);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.2s;
+    }
+
+    .recipe-selector-btn:active {
+      border-color: var(--primary);
+    }
+
+    .recipe-info-main {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow: hidden;
+    }
+
+    .recipe-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recipe-formula-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Target Weight Input Section */
+    .weight-input-container {
+      background: var(--bg-input);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .weight-input-container:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .weight-input-wrapper {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .weight-input {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 2.2rem;
+      font-weight: 800;
+      width: 100%;
+      outline: none;
+      font-variant-numeric: tabular-nums;
+      font-family: inherit;
+    }
+
+    .weight-unit {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .clear-btn {
+      background: var(--bg-card-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .clear-btn:active {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    /* Preset Buttons */
+    .presets-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .preset-btn {
+      background: var(--bg-card-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 4px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .preset-btn:active {
+      background: var(--primary);
+      color: #0b0f19;
+      transform: scale(0.95);
+    }
+
+    /* Recipe Range Adjusters */
+    .range-adjust-card {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .range-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .range-row:last-child { margin-bottom: 0; }
+
+    .range-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .range-chips {
+      display: flex;
+      gap: 6px;
+    }
+
+    .range-chip-btn {
+      flex: 1;
+      background: var(--bg-card-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .range-chip-btn.active {
+      background: var(--primary);
+      color: #0b0f19;
+      border-color: var(--primary);
+    }
+
+    /* Results / Components Table */
+    .components-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .component-item {
+      background: var(--bg-card-elevated);
+      border-left: 5px solid var(--primary);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      transition: transform 0.15s;
+    }
+
+    .component-item.type-base { border-left-color: var(--accent-base); }
+    .component-item.type-hardener { border-left-color: var(--accent-hardener); }
+    .component-item.type-thinner { border-left-color: var(--accent-thinner); }
+    .component-item.type-additive { border-left-color: var(--accent-additive); }
+
+    .component-details {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+      padding-right: 8px;
+    }
+
+    .component-name-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .component-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+
+    .component-tag {
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag-base { background: rgba(56, 189, 248, 0.18); color: var(--accent-base); }
+    .tag-hardener { background: rgba(245, 158, 11, 0.18); color: var(--accent-hardener); }
+    .tag-thinner { background: rgba(16, 185, 129, 0.18); color: var(--accent-thinner); }
+    .tag-additive { background: rgba(168, 85, 247, 0.18); color: var(--accent-additive); }
+
+    .component-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .component-values {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      min-width: 110px;
+    }
+
+    .component-grams {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .component-cumulative {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.12);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    /* Scales Cumulative Guide Banner */
+    .scales-banner {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(245, 158, 11, 0.08));
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .scales-icon {
+      font-size: 1.5rem;
+    }
+
+    .scales-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    .scales-text strong {
+      color: var(--text);
+    }
+
+    /* Action Helpers */
+    .action-helpers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .helper-btn {
+      background: var(--bg-card-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .helper-btn:active {
+      background: var(--primary-glow);
+      border-color: var(--primary);
+    }
+
+    /* Bottom Navigation Bar */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding-top: 8px;
+      padding-bottom: calc(var(--safe-bottom) + 8px);
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 16px;
+      transition: color 0.15s;
+    }
+
+    .nav-tab.active {
+      color: var(--primary);
+    }
+
+    .nav-tab svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* Modals & Sheets */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .sheet-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      width: 100%;
+      max-width: 600px;
+      max-height: 88vh;
+      padding: 20px;
+      padding-bottom: calc(var(--safe-bottom) + 24px);
+      overflow-y: auto;
+      animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .sheet-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .sheet-close {
+      background: var(--bg-input);
+      border: none;
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Recipe List inside Sheet */
+    .recipe-search {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    .recipe-search:focus {
+      border-color: var(--primary);
+    }
+
+    .recipe-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .recipe-card-item {
+      background: var(--bg-card-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .recipe-card-item.selected {
+      border-color: var(--primary);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .recipe-card-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .recipe-card-proportions {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* Form Fields for Custom Recipe */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+    }
+
+    .component-form-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 34px;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #0b0f19;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    /* Step-by-Step Pouring Mode Modal */
+    .step-card {
+      background: var(--bg-input);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .step-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .step-comp-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .step-instruction {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .step-big-target {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .step-sub-delta {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .step-nav-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Install banner */
+    .ios-install-banner {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(30, 41, 59, 0.7));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .ios-install-banner svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--primary);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Header -->
+    <header>
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        </div>
+        <div class="logo-text">
+          <h1>Маляр Калькулятор</h1>
+          <span>100% Офлайн • По весу</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <!-- Keep Awake (Wake Lock) Button -->
+        <button id="wakeLockBtn" class="icon-btn" title="Не гасить экран" onclick="toggleWakeLock()">
+          <svg viewBox="0 0 24 24"><path d="M12 2a1 1 0 0 1 1 1v1.07A8.002 8.002 0 0 1 20 12c0 2.2-.89 4.19-2.34 5.66l.76.76a1 1 0 0 1-1.42 1.42l-.76-.76A7.962 7.962 0 0 1 12 20a7.962 7.962 0 0 1-4.24-.92l-.76.76a1 1 0 0 1-1.42-1.42l.76-.76A7.962 7.962 0 0 1 4 12c0-4.08 3.05-7.44 7-7.93V3a1 1 0 0 1 1-1zm0 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+        </button>
+        <!-- Dark / Light theme toggle -->
+        <button id="themeToggleBtn" class="icon-btn" title="Сменить тему" onclick="toggleTheme()">
+          <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- iOS Add to Homescreen Prompt -->
+    <div id="iosInstallPrompt" class="ios-install-banner hidden">
+      <svg viewBox="0 0 24 24"><path d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3c1.1 0 2 .89 2 2z"/></svg>
+      <div>
+        <strong>Установите на iPhone:</strong> Нажмите кнопку <em>«Поделиться»</em> внизу Safari и выберите <strong>«На экран «Домой»»</strong>, чтобы открывать без интернета.
+        <span onclick="this.parentElement.parentElement.classList.add('hidden')" style="text-decoration: underline; margin-left: 6px; cursor: pointer; color: var(--primary);">Скрыть</span>
+      </div>
+    </div>
+
+    <!-- MAIN VIEW (CALCULATOR) -->
+    <main id="calcView">
+      
+      <!-- Quick Tech Chips Selector (Top bar for fast switching) -->
+      <div class="tech-chips-scroll" id="techChipsContainer">
+        <!-- Rendered dynamically for instant 1-tap switching -->
+      </div>
+
+      <!-- Selected Recipe Card -->
+      <div class="card">
+        <div class="section-title">
+          <span>Выбранный материал</span>
+          <span style="cursor:pointer; color:var(--primary);" onclick="openRecipeModal()">Все рецепты ▾</span>
+        </div>
+        <button class="recipe-selector-btn" onclick="openRecipeModal()">
+          <div class="recipe-info-main">
+            <span class="recipe-name" id="currentRecipeName">ATL90M — Лак акриловый 20гл</span>
+            <span class="recipe-formula-badge" id="currentRecipeBadge">
+              <span>●</span> <span id="currentRecipeProportions">База: 100 | Отверд: 15 | Разбав: 25</span>
+            </span>
+          </div>
+          <svg style="width:20px; height:20px; fill:currentColor; color:var(--text-muted);" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
+      </div>
+
+      <!-- Quick Range Fine-tuning (If recipe has min-max options for hardener or thinner) -->
+      <div id="recipeRangesCard" class="range-adjust-card hidden">
+        <!-- Populated dynamically with min / mid / max buttons -->
+      </div>
+
+      <!-- Target Total Weight Input Card -->
+      <div class="card">
+        <div class="section-title">
+          <span>Нужный общий вес смеси</span>
+          <span style="font-weight:700; color:var(--primary);">ГОТОВЫЙ РАСТВОР</span>
+        </div>
+
+        <div class="weight-input-container">
+          <div class="weight-input-wrapper">
+            <input type="number" inputmode="decimal" id="targetWeightInput" class="weight-input" placeholder="0" value="250" oninput="calculate()">
+            <span class="weight-unit">грамм</span>
+          </div>
+          <button class="clear-btn" onclick="setWeight(0)">Сброс</button>
+        </div>
+
+        <!-- Quick Weight Buttons -->
+        <div class="presets-row">
+          <button class="preset-btn" onclick="addWeight(50)">+50г</button>
+          <button class="preset-btn" onclick="addWeight(100)">+100г</button>
+          <button class="preset-btn" onclick="addWeight(200)">+200г</button>
+          <button class="preset-btn" onclick="addWeight(300)">+300г</button>
+        </div>
+        <div class="presets-row">
+          <button class="preset-btn" onclick="setWeight(150)">150г</button>
+          <button class="preset-btn" onclick="setWeight(250)">250г</button>
+          <button class="preset-btn" onclick="setWeight(350)">350г</button>
+          <button class="preset-btn" onclick="setWeight(500)">500г</button>
+        </div>
+      </div>
+
+      <!-- Calculation Results Card -->
+      <div class="card">
+        <div class="section-title">
+          <span>Точная граммовка компонентов</span>
+          <span id="totalSummaryText" style="color:var(--text); font-weight:800;">Итого: 250.0 г</span>
+        </div>
+
+        <div class="components-list" id="componentsContainer">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Scales cumulative banner -->
+        <div class="scales-banner">
+          <div class="scales-icon">⚖️</div>
+          <div class="scales-text">
+            <strong>Для весов:</strong> наливайте компоненты по очереди до отметки <em>«На весах»</em> без промежуточного сброса тары.
+          </div>
+        </div>
+
+        <!-- Action Helpers -->
+        <div class="action-helpers">
+          <button class="helper-btn" onclick="startStepGuide()">
+            <svg style="width:16px; height:16px; fill:currentColor;" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            Пошаговый налив
+          </button>
+          <button class="helper-btn" onclick="openOverpourModal()">
+            <svg style="width:16px; height:16px; fill:currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            Перелил базу?
+          </button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- RECIPE MANAGER VIEW -->
+    <section id="recipeManagerView" class="hidden">
+      <div class="card">
+        <div class="section-title">
+          <span>База технологических карт</span>
+          <button class="clear-btn" style="color:var(--primary);" onclick="openAddRecipeModal()">+ Создать техкарту</button>
+        </div>
+        <input type="text" id="recipeSearchInput" class="recipe-search" placeholder="Поиск техкарты (ATL90M, ATS20, PPL20DM...)" oninput="renderRecipeManagerList()">
+        <div class="recipe-list" id="recipeManagerList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS & BACKUP VIEW -->
+    <section id="settingsView" class="hidden">
+      <div class="card">
+        <div class="section-title"><span>Резервное копирование и экспорт</span></div>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">
+          Все ваши технологические карты хранятся локально в памяти iPhone. Вы можете сохранить их в файл или восстановить на другом устройстве.
+        </p>
+        <button class="btn-primary" onclick="exportData()">
+          <svg style="width:18px; height:18px; fill:currentColor;" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          Экспорт всех техкарт (JSON)
+        </button>
+        <div style="margin-top:10px;">
+          <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importData(event)">
+          <button class="btn-secondary" onclick="document.getElementById('importFileInput').click()">
+            Импорт техкарт из файла
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title"><span>Сброс настроек</span></div>
+        <button class="btn-secondary" style="color:var(--danger); border-color:var(--danger);" onclick="resetToDefaults()">
+          Восстановить заводские техкарты
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="section-title"><span>О приложении</span></div>
+        <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.4;">
+          <strong>Маляр Калькулятор Pro</strong><br>
+          100% Офлайн PWA для iPhone.<br>
+          Рассчитывает граммовки по целевому общему весу раствора и выводит нарастающий итог для удобного взвешивания на весах.
+        </p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- BOTTOM NAVIGATION -->
+  <nav class="nav-bar">
+    <button class="nav-tab active" id="tabCalc" onclick="switchTab('calc')">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6 14H7v-2h6v2zm4-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      <span>Калькулятор</span>
+    </button>
+    <button class="nav-tab" id="tabRecipes" onclick="switchTab('recipes')">
+      <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+      <span>Техкарты</span>
+    </button>
+    <button class="nav-tab" id="tabSettings" onclick="switchTab('settings')">
+      <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      <span>Инфо</span>
+    </button>
+  </nav>
+
+  <!-- MODAL: QUICK SELECT RECIPE -->
+  <div id="recipeSelectModal" class="modal-overlay" onclick="closeModal('recipeSelectModal')">
+    <div class="sheet-content" onclick="event.stopPropagation()">
+      <div class="sheet-header">
+        <h3 class="sheet-title">Технологические карты</h3>
+        <button class="sheet-close" onclick="closeModal('recipeSelectModal')">✕</button>
+      </div>
+      <input type="text" id="recipeQuickSearch" class="recipe-search" placeholder="Поиск техкарты..." oninput="filterQuickRecipes()">
+      <div class="recipe-list" id="quickRecipeList"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE / EDIT RECIPE -->
+  <div id="recipeEditModal" class="modal-overlay" onclick="closeModal('recipeEditModal')">
+    <div class="sheet-content" onclick="event.stopPropagation()">
+      <div class="sheet-header">
+        <h3 class="sheet-title" id="editModalTitle">Новая технологическая карта</h3>
+        <button class="sheet-close" onclick="closeModal('recipeEditModal')">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Код / Название материала</label>
+        <input type="text" id="editRecipeName" class="form-input" placeholder="Например: ATL90M Лак акриловый">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Категория / Описание</label>
+        <input type="text" id="editRecipeCategory" class="form-input" placeholder="Лак, Грунт, Эмаль...">
+      </div>
+
+      <div class="section-title" style="margin-top:16px;">
+        <span>Компоненты на 100 г базы</span>
+        <button type="button" class="clear-btn" style="color:var(--primary);" onclick="addComponentRow()">+ Компонент</button>
+      </div>
+
+      <div id="editComponentsRows">
+        <!-- Dynamic component rows -->
+      </div>
+
+      <button class="btn-primary" onclick="saveCurrentRecipeForm()">Сохранить техкарту</button>
+    </div>
+  </div>
+
+  <!-- MODAL: STEP-BY-STEP POURING ASSISTANT -->
+  <div id="stepGuideModal" class="modal-overlay" onclick="closeModal('stepGuideModal')">
+    <div class="sheet-content" onclick="event.stopPropagation()">
+      <div class="sheet-header">
+        <h3 class="sheet-title">Пошаговый налив смеси</h3>
+        <button class="sheet-close" onclick="closeModal('stepGuideModal')">✕</button>
+      </div>
+
+      <div class="step-card">
+        <div id="stepBadge" class="step-badge tag-base">Шаг 1 из 3</div>
+        <div id="stepCompName" class="step-comp-name">База / Лак</div>
+        <div id="stepInstruction" class="step-instruction">Поставьте тару на весы, сбросьте в ноль и наливайте до:</div>
+        <div id="stepBigTarget" class="step-big-target">156.3 г</div>
+        <div id="stepSubDelta" class="step-sub-delta">(Добавить ровно 156.3 г)</div>
+      </div>
+
+      <div class="step-nav-buttons">
+        <button id="stepPrevBtn" class="btn-secondary" onclick="prevStep()">Назад</button>
+        <button id="stepNextBtn" class="btn-primary" onclick="nextStep()" style="margin-top:0;">Далее →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: OVERPOUR RECALCULATOR (Я ПЕРЕЛИЛ) -->
+  <div id="overpourModal" class="modal-overlay" onclick="closeModal('overpourModal')">
+    <div class="sheet-content" onclick="event.stopPropagation()">
+      <div class="sheet-header">
+        <h3 class="sheet-title">Перелили компонент?</h3>
+        <button class="sheet-close" onclick="closeModal('overpourModal')">✕</button>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">
+        Если вы случайно налили больше базы или отвердителя, введите фактический вес — калькулятор пересчитает остальные компоненты для сохранения идеальной пропорции.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label">Какой компонент перелит?</label>
+        <select id="overpourCompSelect" class="form-input" onchange="updateOverpourTargetHint()"></select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Фактический вес на весах (г):</label>
+        <input type="number" inputmode="decimal" id="overpourActualInput" class="form-input" placeholder="0">
+      </div>
+
+      <button class="btn-primary" onclick="applyOverpourRecalculation()">Пересчитать смесь</button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT APP LOGIC -->
+  <script>
+    // --- USER'S EXACT TECH CARDS & PRESETS ---
+    const DEFAULT_RECIPES = [
+      {
+        id: 'atl90m',
+        code: 'ATL90M',
+        name: 'ATL90M — Лак акриловый 20гл',
+        category: 'Лак',
+        components: [
+          { name: 'База ATL90M (20гл)', type: 'base', parts: 100 },
+          { name: 'Отвердитель AC41 / AC40', type: 'hardener', parts: 15, range: [10, 15, 20] },
+          { name: 'Разбавитель S80 / S70 / S50', type: 'thinner', parts: 25, range: [20, 25, 30] }
+        ]
+      },
+      {
+        id: 'ats20',
+        code: 'ATS20',
+        name: 'ATS20 — Грунт акриловый прозрачный',
+        category: 'Грунт',
+        components: [
+          { name: 'База ATS20 (прозрачный)', type: 'base', parts: 100 },
+          { name: 'Отвердитель AC40', type: 'hardener', parts: 20 },
+          { name: 'Разбавитель S30 / S50 / S80', type: 'thinner', parts: 35, range: [30, 35, 40] }
+        ]
+      },
+      {
+        id: 'ppl20dm',
+        code: 'PPL20DM',
+        name: 'PPL20DM — Эмаль белая матовая 5гл',
+        category: 'Эмаль',
+        components: [
+          { name: 'База PPL20DM (белая 5гл)', type: 'base', parts: 100 },
+          { name: 'Отвердитель PC60', type: 'hardener', parts: 40 },
+          { name: 'Разбавитель S50', type: 'thinner', parts: 25, range: [20, 25, 30] }
+        ]
+      },
+      {
+        id: 'pps50277',
+        code: 'PPS50277',
+        name: 'PPS50277 — Грунт ПУ белый тиксотропный',
+        category: 'Грунт',
+        components: [
+          { name: 'База PPS50277 (ПУ белый)', type: 'base', parts: 100 },
+          { name: 'Отвердитель PC20', type: 'hardener', parts: 30 },
+          { name: 'Разбавитель S50', type: 'thinner', parts: 15, range: [10, 15, 20] }
+        ]
+      }
+    ];
+
+    // --- STATE MANAGEMENT ---
+    let recipes = [];
+    let currentRecipeId = 'atl90m';
+    let calculatedSteps = [];
+    let currentStepIdx = 0;
+    let wakeLock = null;
+
+    // Active chosen range overrides for currently selected recipe
+    let activeRanges = {};
+
+    // --- INITIALIZATION ---
+    function init() {
+      // Check if user has saved recipes; if old format without user codes, reset to user's cards
+      const saved = localStorage.getItem('painter_recipes_v2');
+      if (saved) {
+        try {
+          recipes = JSON.parse(saved);
+        } catch (e) {
+          recipes = JSON.parse(JSON.stringify(DEFAULT_RECIPES));
+        }
+      } else {
+        recipes = JSON.parse(JSON.stringify(DEFAULT_RECIPES));
+        saveRecipes();
+      }
+
+      const savedSelectedId = localStorage.getItem('painter_selected_recipe_v2');
+      if (savedSelectedId && recipes.some(r => r.id === savedSelectedId)) {
+        currentRecipeId = savedSelectedId;
+      } else {
+        currentRecipeId = recipes[0].id;
+      }
+
+      // Check iOS standalone mode for prompt
+      const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+      const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+      if (isIos && !isStandalone) {
+        document.getElementById('iosInstallPrompt').classList.remove('hidden');
+      }
+
+      // Restore theme
+      const savedTheme = localStorage.getItem('painter_theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+      }
+
+      renderTechChips();
+      updateRecipeHeaderUI();
+      calculate();
+      registerServiceWorker();
+    }
+
+    function saveRecipes() {
+      localStorage.setItem('painter_recipes_v2', JSON.stringify(recipes));
+    }
+
+    function getCurrentRecipe() {
+      return recipes.find(r => r.id === currentRecipeId) || recipes[0];
+    }
+
+    // --- QUICK CHIPS TOP BAR ---
+    function renderTechChips() {
+      const container = document.getElementById('techChipsContainer');
+      container.innerHTML = '';
+
+      recipes.forEach(r => {
+        const chip = document.createElement('div');
+        chip.className = `tech-chip ${r.id === currentRecipeId ? 'active' : ''}`;
+        const code = r.code || r.name.split(' ')[0] || r.name;
+        chip.innerHTML = `
+          <span class="chip-code">${escapeHtml(code)}</span>
+          <span class="chip-desc">${escapeHtml(r.category || 'Материал')}</span>
+        `;
+        chip.onclick = () => {
+          selectRecipe(r.id);
+        };
+        container.appendChild(chip);
+      });
+    }
+
+    function selectRecipe(id) {
+      triggerHaptic();
+      currentRecipeId = id;
+      localStorage.setItem('painter_selected_recipe_v2', id);
+      activeRanges = {}; // reset custom ranges
+      renderTechChips();
+      updateRecipeHeaderUI();
+      calculate();
+    }
+
+    // --- RECIPE HEADER & RANGES UI ---
+    function updateRecipeHeaderUI() {
+      const r = getCurrentRecipe();
+      document.getElementById('currentRecipeName').textContent = r.name;
+      
+      const rangesCard = document.getElementById('recipeRangesCard');
+      rangesCard.innerHTML = '';
+      let hasRanges = false;
+
+      const formulaParts = [];
+
+      r.components.forEach((c, idx) => {
+        const currentVal = (activeRanges[idx] !== undefined) ? activeRanges[idx] : c.parts;
+        formulaParts.push(`${c.name.split(' ')[0]}: ${currentVal}`);
+
+        if (c.range && Array.isArray(c.range) && c.range.length > 1) {
+          hasRanges = true;
+          const rangeRow = document.createElement('div');
+          rangeRow.className = 'range-row';
+
+          let rangeLabel = 'Диапазон:';
+          if (c.type === 'hardener') rangeLabel = 'Отвердитель:';
+          else if (c.type === 'thinner') rangeLabel = 'Разбавитель:';
+
+          const chipsHtml = c.range.map(val => {
+            const isSel = (currentVal === val);
+            return `<button class="range-chip-btn ${isSel ? 'active' : ''}" onclick="setRangeOverride(${idx}, ${val})">${val} г (${val === c.range[0] ? 'мин' : val === c.range[c.range.length-1] ? 'макс' : 'норм'})</button>`;
+          }).join('');
+
+          rangeRow.innerHTML = `
+            <div class="range-label-row">
+              <span style="color:var(--text);">${escapeHtml(c.name)}</span>
+              <span style="color:var(--primary); font-weight:800;">${currentVal} г</span>
+            </div>
+            <div class="range-chips">${chipsHtml}</div>
+          `;
+          rangesCard.appendChild(rangeRow);
+        }
+      });
+
+      document.getElementById('currentRecipeProportions').textContent = formulaParts.join(' | ');
+
+      if (hasRanges) {
+        rangesCard.classList.remove('hidden');
+      } else {
+        rangesCard.classList.add('hidden');
+      }
+    }
+
+    function setRangeOverride(compIdx, val) {
+      triggerHaptic();
+      activeRanges[compIdx] = val;
+      updateRecipeHeaderUI();
+      calculate();
+    }
+
+    // --- CORE CALCULATION ENGINE ---
+    function calculate() {
+      const recipe = getCurrentRecipe();
+      const targetWeightStr = document.getElementById('targetWeightInput').value;
+      const targetWeight = parseFloat(targetWeightStr) || 0;
+
+      // Effective parts per component (including any range overrides)
+      const effectiveComponents = recipe.components.map((c, idx) => ({
+        ...c,
+        effectiveParts: (activeRanges[idx] !== undefined) ? activeRanges[idx] : (parseFloat(c.parts) || 0)
+      }));
+
+      const totalParts = effectiveComponents.reduce((sum, c) => sum + c.effectiveParts, 0);
+      const container = document.getElementById('componentsContainer');
+      container.innerHTML = '';
+
+      if (totalParts <= 0 || targetWeight <= 0) {
+        document.getElementById('totalSummaryText').textContent = 'Итого: 0.0 г';
+        calculatedSteps = [];
+        return;
+      }
+
+      let cumulative = 0;
+      calculatedSteps = [];
+
+      effectiveComponents.forEach((comp, idx) => {
+        const parts = comp.effectiveParts;
+        const proportion = parts / totalParts;
+        const grams = targetWeight * proportion;
+        cumulative += grams;
+
+        calculatedSteps.push({
+          name: comp.name,
+          type: comp.type,
+          parts: parts,
+          grams: grams,
+          cumulative: cumulative
+        });
+
+        // Type label
+        let typeLabel = 'База';
+        let typeClass = 'type-base';
+        let tagClass = 'tag-base';
+        if (comp.type === 'hardener') { typeLabel = 'Отвердитель'; typeClass = 'type-hardener'; tagClass = 'tag-hardener'; }
+        else if (comp.type === 'thinner') { typeLabel = 'Разбавитель'; typeClass = 'type-thinner'; tagClass = 'tag-thinner'; }
+        else if (comp.type === 'additive') { typeLabel = 'Добавка'; typeClass = 'type-additive'; tagClass = 'tag-additive'; }
+
+        const percentOfTotal = (proportion * 100).toFixed(1);
+
+        const compDiv = document.createElement('div');
+        compDiv.className = `component-item ${typeClass}`;
+        compDiv.innerHTML = `
+          <div class="component-details">
+            <div class="component-name-row">
+              <span class="component-title">${escapeHtml(comp.name)}</span>
+              <span class="component-tag ${tagClass}">${typeLabel}</span>
+            </div>
+            <div class="component-meta">${parts} г на 100г базы (${percentOfTotal}%)</div>
+          </div>
+          <div class="component-values">
+            <div class="component-grams">${grams.toFixed(1)} <span style="font-size:0.9rem; font-weight:700;">г</span></div>
+            <div class="component-cumulative">На весах: <strong>${cumulative.toFixed(1)} г</strong></div>
+          </div>
+        `;
+        container.appendChild(compDiv);
+      });
+
+      document.getElementById('totalSummaryText').textContent = `Итого: ${targetWeight.toFixed(1)} г`;
+    }
+
+    // --- WEIGHT HELPERS ---
+    function setWeight(val) {
+      triggerHaptic();
+      document.getElementById('targetWeightInput').value = val > 0 ? val : '';
+      calculate();
+    }
+
+    function addWeight(delta) {
+      triggerHaptic();
+      const input = document.getElementById('targetWeightInput');
+      const current = parseFloat(input.value) || 0;
+      input.value = Math.max(0, current + delta);
+      calculate();
+    }
+
+    function triggerHaptic() {
+      if (navigator.vibrate) {
+        navigator.vibrate(10);
+      }
+    }
+
+    // --- STEP GUIDE MODAL ---
+    function startStepGuide() {
+      if (calculatedSteps.length === 0) {
+        alert('Сначала введите целевой вес смеси в граммах!');
+        return;
+      }
+      currentStepIdx = 0;
+      updateStepModalUI();
+      openModal('stepGuideModal');
+    }
+
+    function updateStepModalUI() {
+      const step = calculatedSteps[currentStepIdx];
+      const totalSteps = calculatedSteps.length;
+
+      let tagClass = 'tag-base';
+      if (step.type === 'hardener') tagClass = 'tag-hardener';
+      else if (step.type === 'thinner') tagClass = 'tag-thinner';
+      else if (step.type === 'additive') tagClass = 'tag-additive';
+
+      const badge = document.getElementById('stepBadge');
+      badge.className = `step-badge ${tagClass}`;
+      badge.textContent = `Шаг ${currentStepIdx + 1} из ${totalSteps}`;
+
+      document.getElementById('stepCompName').textContent = step.name;
+      document.getElementById('stepBigTarget').textContent = `${step.cumulative.toFixed(1)} г`;
+      document.getElementById('stepSubDelta').textContent = `(Долить +${step.grams.toFixed(1)} г)`;
+
+      const instruction = currentStepIdx === 0
+        ? 'Поставьте тару на весы, сбросьте в ноль (Tara) и налейте базу до:'
+        : `Не сбрасывая весы, доливайте компонент до общей отметки:`;
+      document.getElementById('stepInstruction').textContent = instruction;
+
+      document.getElementById('stepPrevBtn').disabled = (currentStepIdx === 0);
+      document.getElementById('stepPrevBtn').style.opacity = currentStepIdx === 0 ? '0.4' : '1';
+
+      if (currentStepIdx === totalSteps - 1) {
+        document.getElementById('stepNextBtn').textContent = 'Готово! ✓';
+      } else {
+        document.getElementById('stepNextBtn').textContent = 'Далее →';
+      }
+    }
+
+    function nextStep() {
+      triggerHaptic();
+      if (currentStepIdx < calculatedSteps.length - 1) {
+        currentStepIdx++;
+        updateStepModalUI();
+      } else {
+        closeModal('stepGuideModal');
+      }
+    }
+
+    function prevStep() {
+      triggerHaptic();
+      if (currentStepIdx > 0) {
+        currentStepIdx--;
+        updateStepModalUI();
+      }
+    }
+
+    // --- OVERPOUR (Я ПЕРЕЛИЛ) RECALCULATION ---
+    function openOverpourModal() {
+      const recipe = getCurrentRecipe();
+      const select = document.getElementById('overpourCompSelect');
+      select.innerHTML = '';
+
+      calculatedSteps.forEach((s, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${s.name} (по плану: ${s.grams.toFixed(1)} г)`;
+        select.appendChild(opt);
+      });
+
+      const actualInput = document.getElementById('overpourActualInput');
+      actualInput.value = calculatedSteps[0] ? (calculatedSteps[0].grams + 15).toFixed(1) : '';
+      openModal('overpourModal');
+    }
+
+    function updateOverpourTargetHint() {
+      const idx = parseInt(document.getElementById('overpourCompSelect').value) || 0;
+      if (calculatedSteps[idx]) {
+        document.getElementById('overpourActualInput').value = (calculatedSteps[idx].grams + 10).toFixed(1);
+      }
+    }
+
+    function applyOverpourRecalculation() {
+      const idx = parseInt(document.getElementById('overpourCompSelect').value) || 0;
+      const actualVal = parseFloat(document.getElementById('overpourActualInput').value) || 0;
+      const recipe = getCurrentRecipe();
+
+      if (actualVal <= 0 || !recipe.components[idx]) {
+        alert('Введите корректный фактический вес!');
+        return;
+      }
+
+      const totalParts = recipe.components.reduce((sum, c, i) => sum + ((activeRanges[i] !== undefined) ? activeRanges[i] : (parseFloat(c.parts) || 0)), 0);
+      const selectedParts = (activeRanges[idx] !== undefined) ? activeRanges[idx] : (parseFloat(recipe.components[idx].parts) || 1);
+
+      // New Total Weight = actualVal * (totalParts / selectedParts)
+      const newTotalWeight = actualVal * (totalParts / selectedParts);
+
+      document.getElementById('targetWeightInput').value = newTotalWeight.toFixed(1);
+      calculate();
+      closeModal('overpourModal');
+      triggerHaptic();
+    }
+
+    // --- RECIPE SELECTION MODAL ---
+    function openRecipeModal() {
+      renderQuickRecipeList();
+      openModal('recipeSelectModal');
+    }
+
+    function renderQuickRecipeList() {
+      const list = document.getElementById('quickRecipeList');
+      const query = (document.getElementById('recipeQuickSearch').value || '').toLowerCase();
+      list.innerHTML = '';
+
+      recipes.filter(r => r.name.toLowerCase().includes(query) || (r.code && r.code.toLowerCase().includes(query)) || (r.category && r.category.toLowerCase().includes(query))).forEach(r => {
+        const item = document.createElement('div');
+        item.className = `recipe-card-item ${r.id === currentRecipeId ? 'selected' : ''}`;
+        const partsStr = r.components.map(c => `${c.name}: ${c.parts}г`).join(' • ');
+        item.innerHTML = `
+          <div>
+            <div class="recipe-card-title">${escapeHtml(r.name)}</div>
+            <div class="recipe-card-proportions">${escapeHtml(partsStr)}</div>
+          </div>
+          <div style="font-size:0.8rem; font-weight:800; color:var(--primary);">${r.category || ''}</div>
+        `;
+        item.onclick = () => {
+          selectRecipe(r.id);
+          closeModal('recipeSelectModal');
+        };
+        list.appendChild(item);
+      });
+    }
+
+    function filterQuickRecipes() {
+      renderQuickRecipeList();
+    }
+
+    // --- RECIPE MANAGER ---
+    let editingRecipeId = null;
+
+    function renderRecipeManagerList() {
+      const list = document.getElementById('recipeManagerList');
+      const query = (document.getElementById('recipeSearchInput').value || '').toLowerCase();
+      list.innerHTML = '';
+
+      recipes.filter(r => r.name.toLowerCase().includes(query) || (r.code && r.code.toLowerCase().includes(query)) || (r.category && r.category.toLowerCase().includes(query))).forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'recipe-card-item';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'stretch';
+        card.style.gap = '10px';
+
+        const partsStr = r.components.map(c => `${c.name}: ${c.parts} г`).join(' • ');
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <div class="recipe-card-title" style="font-size:1.05rem;">${escapeHtml(r.name)}</div>
+              <div class="recipe-card-proportions">${escapeHtml(partsStr)}</div>
+            </div>
+            <span class="component-tag tag-base">${escapeHtml(r.category || 'Рецепт')}</span>
+          </div>
+          <div style="display:flex; gap:8px; justify-content:flex-end;">
+            <button class="clear-btn" style="color:var(--primary); font-weight:700;" onclick="selectRecipeFromManager('${r.id}')">Выбрать</button>
+            <button class="clear-btn" onclick="editRecipeModalOpen('${r.id}')">Изменить</button>
+            <button class="clear-btn" style="color:var(--danger);" onclick="deleteRecipe('${r.id}')">Удалить</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function selectRecipeFromManager(id) {
+      selectRecipe(id);
+      switchTab('calc');
+    }
+
+    function deleteRecipe(id) {
+      if (recipes.length <= 1) {
+        alert('Нельзя удалить последнюю технологическую карту!');
+        return;
+      }
+      if (confirm('Вы уверены, что хотите удалить эту техкарту?')) {
+        recipes = recipes.filter(r => r.id !== id);
+        if (currentRecipeId === id) {
+          currentRecipeId = recipes[0].id;
+        }
+        saveRecipes();
+        renderTechChips();
+        renderRecipeManagerList();
+        updateRecipeHeaderUI();
+        calculate();
+      }
+    }
+
+    function openAddRecipeModal() {
+      editingRecipeId = null;
+      document.getElementById('editModalTitle').textContent = 'Новая технологическая карта';
+      document.getElementById('editRecipeName').value = '';
+      document.getElementById('editRecipeCategory').value = 'Лак';
+      
+      const rows = document.getElementById('editComponentsRows');
+      rows.innerHTML = '';
+      addComponentRow('База', 'base', 100);
+      addComponentRow('Отвердитель', 'hardener', 20);
+      addComponentRow('Разбавитель', 'thinner', 20);
+      
+      openModal('recipeEditModal');
+    }
+
+    function editRecipeModalOpen(id) {
+      editingRecipeId = id;
+      const r = recipes.find(item => item.id === id);
+      if (!r) return;
+
+      document.getElementById('editModalTitle').textContent = 'Редактирование техкарты';
+      document.getElementById('editRecipeName').value = r.name;
+      document.getElementById('editRecipeCategory').value = r.category || '';
+
+      const rows = document.getElementById('editComponentsRows');
+      rows.innerHTML = '';
+      r.components.forEach(c => {
+        addComponentRow(c.name, c.type, c.parts);
+      });
+
+      openModal('recipeEditModal');
+    }
+
+    function addComponentRow(name = 'Компонент', type = 'thinner', parts = 10) {
+      const rows = document.getElementById('editComponentsRows');
+      const div = document.createElement('div');
+      div.className = 'component-form-row';
+      div.innerHTML = `
+        <input type="text" class="form-input comp-name-input" placeholder="Название компонента" value="${escapeHtml(name)}">
+        <input type="number" inputmode="decimal" class="form-input comp-parts-input" placeholder="Грамм на 100г базы" value="${parts}">
+        <button type="button" class="clear-btn" style="padding:8px; color:var(--danger); border-radius:50%;" onclick="this.parentElement.remove()">✕</button>
+      `;
+      rows.appendChild(div);
+    }
+
+    function saveCurrentRecipeForm() {
+      const name = document.getElementById('editRecipeName').value.trim();
+      const category = document.getElementById('editRecipeCategory').value.trim() || 'Общее';
+
+      if (!name) {
+        alert('Введите название технологической карты!');
+        return;
+      }
+
+      const rows = document.querySelectorAll('#editComponentsRows .component-form-row');
+      const components = [];
+
+      rows.forEach((row, idx) => {
+        const cName = row.querySelector('.comp-name-input').value.trim() || `Компонент ${idx + 1}`;
+        const cParts = parseFloat(row.querySelector('.comp-parts-input').value) || 0;
+        
+        let cType = 'thinner';
+        const lower = cName.toLowerCase();
+        if (lower.includes('баз') || lower.includes('лак') || lower.includes('грунт') || lower.includes('эмал') || idx === 0) cType = 'base';
+        else if (lower.includes('отверд') || lower.includes('ac4') || lower.includes('pc')) cType = 'hardener';
+        else if (lower.includes('разбав') || lower.includes('раствор') || lower.includes('s50') || lower.includes('s70') || lower.includes('s80') || lower.includes('s30')) cType = 'thinner';
+        else if (lower.includes('добав') || lower.includes('пластиф') || lower.includes('эласт')) cType = 'additive';
+
+        if (cParts > 0) {
+          components.push({ name: cName, type: cType, parts: cParts });
+        }
+      });
+
+      if (components.length === 0) {
+        alert('Добавьте хотя бы один компонент!');
+        return;
+      }
+
+      const codeMatch = name.match(/^[A-Za-z0-9]+/);
+      const code = codeMatch ? codeMatch[0] : name.split(' ')[0];
+
+      if (editingRecipeId) {
+        const r = recipes.find(x => x.id === editingRecipeId);
+        if (r) {
+          r.name = name;
+          r.code = code;
+          r.category = category;
+          r.components = components;
+        }
+      } else {
+        const newId = 'rec_' + Date.now();
+        recipes.push({ id: newId, code, name, category, components });
+        currentRecipeId = newId;
+      }
+
+      saveRecipes();
+      renderTechChips();
+      updateRecipeHeaderUI();
+      calculate();
+      renderRecipeManagerList();
+      closeModal('recipeEditModal');
+      triggerHaptic();
+    }
+
+    // --- NAVIGATION TABS ---
+    function switchTab(tabId) {
+      document.getElementById('calcView').classList.add('hidden');
+      document.getElementById('recipeManagerView').classList.add('hidden');
+      document.getElementById('settingsView').classList.add('hidden');
+
+      document.getElementById('tabCalc').classList.remove('active');
+      document.getElementById('tabRecipes').classList.remove('active');
+      document.getElementById('tabSettings').classList.remove('active');
+
+      if (tabId === 'calc') {
+        document.getElementById('calcView').classList.remove('hidden');
+        document.getElementById('tabCalc').classList.add('active');
+      } else if (tabId === 'recipes') {
+        document.getElementById('recipeManagerView').classList.remove('hidden');
+        document.getElementById('tabRecipes').classList.add('active');
+        renderRecipeManagerList();
+      } else if (tabId === 'settings') {
+        document.getElementById('settingsView').classList.remove('hidden');
+        document.getElementById('tabSettings').classList.add('active');
+      }
+      triggerHaptic();
+    }
+
+    // --- MODAL UTILITIES ---
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    // --- THEME & WAKE LOCK ---
+    function toggleTheme() {
+      triggerHaptic();
+      document.body.classList.toggle('light-theme');
+      const isLight = document.body.classList.contains('light-theme');
+      localStorage.setItem('painter_theme', isLight ? 'light' : 'dark');
+    }
+
+    async function toggleWakeLock() {
+      const btn = document.getElementById('wakeLockBtn');
+      if ('wakeLock' in navigator) {
+        if (!wakeLock) {
+          try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            btn.classList.add('active');
+            wakeLock.addEventListener('release', () => {
+              wakeLock = null;
+              btn.classList.remove('active');
+            });
+          } catch (err) {
+            console.error('WakeLock error:', err);
+          }
+        } else {
+          wakeLock.release();
+          wakeLock = null;
+          btn.classList.remove('active');
+        }
+      } else {
+        alert('Режим постоянной подсветки не поддерживается вашим браузером');
+      }
+    }
+
+    // --- BACKUP / EXPORT / IMPORT ---
+    function exportData() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(recipes, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `painter_recipes_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported) && imported.length > 0 && imported[0].name && imported[0].components) {
+            recipes = imported;
+            currentRecipeId = recipes[0].id;
+            saveRecipes();
+            renderTechChips();
+            updateRecipeHeaderUI();
+            calculate();
+            renderRecipeManagerList();
+            alert('Техкарты успешно импортированы!');
+          } else {
+            alert('Неверный формат файла!');
+          }
+        } catch (err) {
+          alert('Ошибка чтения JSON файла!');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetToDefaults() {
+      if (confirm('Восстановить заводские технологические карты (ATL90M, ATS20, PPL20DM, PPS50277)?')) {
+        recipes = JSON.parse(JSON.stringify(DEFAULT_RECIPES));
+        currentRecipeId = recipes[0].id;
+        activeRanges = {};
+        saveRecipes();
+        renderTechChips();
+        updateRecipeHeaderUI();
+        calculate();
+        renderRecipeManagerList();
+        alert('Заводские карты восстановлены!');
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
+    // --- SERVICE WORKER REGISTRATION ---
+    function registerServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+          .then(() => console.log('ServiceWorker registered'))
+          .catch(err => console.log('SW registration error:', err));
+      }
+    }
+
+    // Run on startup
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
